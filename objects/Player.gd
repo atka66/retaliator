@@ -2,7 +2,7 @@ extends KinematicBody
 
 var speed = 5
 var friction = 0.9
-var gravity = 0.5
+#var gravity = 0.5
 
 var velocity = Vector3.ZERO
 
@@ -11,12 +11,16 @@ var mouseSensHor = 0.3
 var mouseSensVer = mouseSensHor * 0.8
 
 var bobbingRotation = 0
+var alive = true
 export(bool) var shooting = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta):
+	# reset to 0 on y axis
+	transform.origin.y = 0
+	velocity.y = 0
 	# input movement
 	if Input.is_action_pressed("forward"):
 		velocity += -transform.basis.z * speed
@@ -27,7 +31,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("strafe_right"):
 		velocity += transform.basis.x * speed
 	# apply movement
-	velocity.y -= gravity
+	#velocity.y -= gravity
 	velocity = move_and_slide(velocity, Vector3.UP)
 	# friction
 	velocity.x *= friction

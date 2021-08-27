@@ -49,6 +49,7 @@ func _input(event):
 
 func _process(delta):
 	positionCamera()
+	DEBUGTEXT()
 
 func positionCamera():
 	var planarVel = velocity
@@ -61,3 +62,7 @@ func positionCamera():
 
 func shoot():
 	$Camera/Anim.play("shoot")
+
+func DEBUGTEXT():
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		$Camera/DEBUG_TEXT_LEFT.text = "Enemy state: " + str(enemy.state)

@@ -80,6 +80,16 @@ __meta__ = {
 [node name="Anim" type="AnimationPlayer" parent="Camera"]
 anims/shoot = SubResource( 1 )
 
+[node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
+margin_left = 16.0
+margin_top = 336.0
+margin_right = 160.0
+margin_bottom = 376.0
+text = "faszom"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
 shape = SubResource( 2 )

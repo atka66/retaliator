@@ -2,11 +2,11 @@ extends KinematicBody
 
 enum State {
 	SLEEPING, # unalerted
-	SEEKING, # alerted, searching
-	ATTACKING, # alerted, target in sight
+	SEARCHING, # alerted, approaching target
+	ATTACKING, # alerted, attacking target
 	DEAD # dead
 }
-const fov = 160
+const fov = 180
 var speed = 10
 
 export(bool) var alive = true
@@ -19,24 +19,35 @@ func _ready():
 
 func _process(delta):
 	if state == State.SLEEPING:
-		lookForward()
-	if state == State.SEEKING:
-		lookForTarget()
+		checkFront()
+	if state == State.SEARCHING:
+		approachTarget()
+	if state == State.ATTACKING:
+		approachTarget()
 
-func lookForward():
+func checkFront():
 	for player in get_tree().get_nodes_in_group('player'):
-		var toPlayerVec = player.translation - translation
-		if acos(toPlayerVec.normalized().dot(lookAngle)) < deg2rad(fov / 2):
-			$Eyes.cast_to = toPlayerVec
-			if $Eyes.is_colliding():
-				if $Eyes.get_collider() == player:
-					target = player
-					state = State.SEEKING
+		if isInSight(player):
+			target = player
+			state = State.ATTACKING
 
-func lookForTarget():
+func isInSight(entity):
+	var toEntityVec = entity.translation - translation
+	if acos(toEntityVec.normalized().dot(lookAngle)) < deg2rad(fov / 2):
+		$Eyes.cast_to = toEntityVec
+		if $Eyes.is_colliding() && $Eyes.get_collider() == entity:
+			return true
+	return false
+
+func approachTarget():
 	if target != null && target.alive:
-		moveTowards(target)
-		
-func moveTowards(target):
-	var toTargetVec = target.translation - translation
-	move_and_slide(toTargetVec.normalized() * speed, Vector3.UP)
+		if isInSight(target):
+			moveTowards(target.translation)
+		else:
+			moveTowards(target.translation)
+	else:
+		state = State.SLEEPING
+
+func moveTowards(targetPosition):
+	var toTargetVec = targetPosition - translation
+	lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()

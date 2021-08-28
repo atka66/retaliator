@@ -7,7 +7,10 @@ enum State {
 	DEAD # dead
 }
 const fov = 180
-var speed = 10
+var speed = 20
+
+var map_player = null
+var map_nav = null
 
 export(bool) var alive = true
 export(Vector3) var lookAngle = Vector3(0, 0, -1)
@@ -15,7 +18,8 @@ export(State) var state = State.SLEEPING
 var target = null
 
 func _ready():
-	pass # Replace with function body.
+	map_player = get_tree().get_nodes_in_group('player')[0]
+	map_nav = get_tree().get_nodes_in_group('navigation')[0]
 
 func _process(delta):
 	if state == State.SLEEPING:
@@ -26,10 +30,9 @@ func _process(delta):
 		approachTarget()
 
 func checkFront():
-	for player in get_tree().get_nodes_in_group('player'):
-		if isInSight(player):
-			target = player
-			state = State.ATTACKING
+	if isInSight(map_player):
+		target = map_player
+		state = State.ATTACKING
 
 func isInSight(entity):
 	var toEntityVec = entity.translation - translation
@@ -41,13 +44,12 @@ func isInSight(entity):
 
 func approachTarget():
 	if target != null && target.alive:
-		if isInSight(target):
-			moveTowards(target.translation)
-		else:
-			moveTowards(target.translation)
+		moveTowards(target.translation)
 	else:
 		state = State.SLEEPING
 
 func moveTowards(targetPosition):
-	var toTargetVec = targetPosition - translation
-	lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()
+	var path = map_nav.get_simple_path(translation, targetPosition)
+	if path.size() > 1:
+		var toTargetVec = path[1] - translation
+		lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()

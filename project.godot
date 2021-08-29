@@ -16,8 +16,8 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=640
-window/size/height=384
+window/size/width=1280
+window/size/height=768
 window/size/resizable=false
 window/size/fullscreen=true
 window/size/test_width=1360

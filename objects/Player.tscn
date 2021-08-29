@@ -62,7 +62,7 @@ far = 2048.0
 [node name="Weapon" type="TextureRect" parent="Camera"]
 margin_right = 320.0
 margin_bottom = 192.0
-rect_scale = Vector2( 2, 2 )
+rect_scale = Vector2( 4, 4 )
 texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -71,7 +71,7 @@ __meta__ = {
 [node name="Visor" type="TextureRect" parent="Camera"]
 margin_right = 160.0
 margin_bottom = 96.0
-rect_scale = Vector2( 4, 4 )
+rect_scale = Vector2( 8, 8 )
 texture = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -82,9 +82,10 @@ anims/shoot = SubResource( 1 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
 margin_left = 16.0
-margin_top = 336.0
-margin_right = 160.0
-margin_bottom = 376.0
+margin_top = 16.0
+margin_right = 272.0
+margin_bottom = 208.0
+rect_scale = Vector2( 2, 2 )
 text = "faszom"
 __meta__ = {
 "_edit_use_anchors_": false

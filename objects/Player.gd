@@ -36,6 +36,8 @@ func _physics_process(delta):
 	# friction
 	velocity.x *= friction
 	velocity.z *= friction
+	# camera tilt on strafe
+	$Camera.rotation_degrees.z = -velocity.rotated(Vector3.UP, -rotation.y).x / 4
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -64,5 +66,7 @@ func shoot():
 	$Camera/Anim.play("shoot")
 
 func DEBUGTEXT():
-	for enemy in get_tree().get_nodes_in_group("enemy"):
-		$Camera/DEBUG_TEXT_LEFT.text = "Enemy state: " + str(enemy.state)
+	$Camera/DEBUG_TEXT_LEFT.text = ""
+	$Camera/DEBUG_TEXT_LEFT.text += "Cam-tilt (z): " + str($Camera.rotation_degrees.z)
+	$Camera/DEBUG_TEXT_LEFT.text += "\nP-rot (y): " + str(rotation.y)
+	$Camera/DEBUG_TEXT_LEFT.text += "\nVel (x): " + str(velocity.x)

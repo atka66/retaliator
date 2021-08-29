@@ -37,7 +37,7 @@ func _physics_process(delta):
 	velocity.x *= friction
 	velocity.z *= friction
 	# camera tilt on strafe
-	$Camera.rotation_degrees.z = -velocity.rotated(Vector3.UP, -rotation.y).x / 4
+	$Camera.rotation_degrees.z = -velocity.rotated(Vector3.UP, -rotation.y).x / 8
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -64,9 +64,14 @@ func positionCamera():
 
 func shoot():
 	$Camera/Anim.play("shoot")
+	var hitScan = Res.HitScan.instance()
+	hitScan.translation = translation
+	hitScan.translation.y += 3
+	hitScan.cast_to = $Camera.rotation
+	hitScan.cast_to.y = rotation.y
+	hitScan.cast_to.x += deg2rad(91)
+	hitScan.origin = self
+	get_parent().add_child(hitScan)
 
 func DEBUGTEXT():
-	$Camera/DEBUG_TEXT_LEFT.text = ""
-	$Camera/DEBUG_TEXT_LEFT.text += "Cam-tilt (z): " + str($Camera.rotation_degrees.z)
-	$Camera/DEBUG_TEXT_LEFT.text += "\nP-rot (y): " + str(rotation.y)
-	$Camera/DEBUG_TEXT_LEFT.text += "\nVel (x): " + str(velocity.x)
+	pass

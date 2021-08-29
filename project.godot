@@ -14,6 +14,10 @@ config/name="Retaliator"
 run/main_scene="res://maps/Map1.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Res="*res://Res.gd"
+
 [display]
 
 window/size/width=1280

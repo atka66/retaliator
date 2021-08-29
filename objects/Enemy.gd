@@ -8,6 +8,7 @@ enum State {
 }
 const fov = 180
 var speed = 20
+var hp = 10
 
 var map_player = null
 var map_nav = null
@@ -28,6 +29,7 @@ func _process(delta):
 		approachTarget()
 	if state == State.ATTACKING:
 		approachTarget()
+	determineSprite()
 
 func checkFront():
 	if isInSight(map_player):
@@ -53,3 +55,15 @@ func moveTowards(targetPosition):
 	if path.size() > 1:
 		var toTargetVec = path[1] - translation
 		lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()
+
+func determineSprite():
+	var spriteAngle = lookAngle.normalized().dot((map_player.translation - translation).normalized())
+	if spriteAngle > 0.5:
+		$Sprite.frame = 0
+	elif spriteAngle > -0.5:
+		if lookAngle.normalized().cross((map_player.translation - translation).normalized()).y < 0:
+			$Sprite.frame = 1
+		else:
+			$Sprite.frame = 3
+	else:
+		$Sprite.frame = 2

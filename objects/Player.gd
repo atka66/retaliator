@@ -64,14 +64,17 @@ func positionCamera():
 
 func shoot():
 	$Camera/Anim.play("shoot")
-	var hitScan = Res.HitScan.instance()
-	hitScan.translation = translation
-	hitScan.translation.y += 3
-	hitScan.cast_to = $Camera.rotation
-	hitScan.cast_to.y = rotation.y
-	hitScan.cast_to.x += deg2rad(91)
-	hitScan.origin = self
-	get_parent().add_child(hitScan)
+	
+	for i in range(5):
+		var hitScan = Res.HitScan.instance()
+		hitScan.translation = translation
+		hitScan.translation.y += 3
+		var angle = $Camera.rotation
+		angle.y = rotation.y + ((randf() / 20) - 0.025)
+		angle.x += deg2rad(91)
+		hitScan.angle = angle
+		hitScan.origin = self
+		get_parent().add_child(hitScan)
 
 func DEBUGTEXT():
 	pass

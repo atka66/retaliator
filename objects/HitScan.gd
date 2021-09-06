@@ -1,16 +1,24 @@
-extends RayCast
+extends Spatial
 
 var origin
-
+var angle
 const meshMaxLength = 400
+export(float) var alpha = 1.0
 
 func _ready():
-	add_exception(origin)
-	$Spatial.rotation = cast_to
-	if get_collider() == null:
-		$Spatial/Mesh.mesh.height = meshMaxLength
+	rotation = angle
+	$RayCast.force_raycast_update()
+	var meshMaterial = $Mesh.mesh.material.duplicate()
+	var mesh = $Mesh.mesh.duplicate()
+	if $RayCast.get_collider() == null:
+		mesh.height = meshMaxLength
 		print("miss")
 	else:
 		print("hit")
-		$Spatial/Mesh.mesh.height = translation.distance_to(get_collision_point()) / 2
-	$Spatial/Mesh.translation.y = -$Spatial/Mesh.mesh.height / 2
+		mesh.height = translation.distance_to($RayCast.get_collision_point())
+	$Mesh.translation.y = -mesh.height / 2
+	$Mesh.mesh = mesh
+	$Mesh.mesh.material = meshMaterial
+
+func _process(delta):
+	$Mesh.mesh.material.set_shader_param("a", alpha)

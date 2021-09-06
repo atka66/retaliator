@@ -32,7 +32,7 @@ func _process(delta):
 	determineSprite()
 
 func checkFront():
-	if isInSight(map_player):
+	if target == null && isInSight(map_player):
 		target = map_player
 		state = State.ATTACKING
 
@@ -57,13 +57,34 @@ func moveTowards(targetPosition):
 		lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()
 
 func determineSprite():
-	var spriteAngle = lookAngle.normalized().dot((map_player.translation - translation).normalized())
-	if spriteAngle > 0.5:
-		$Sprite.frame = 0
-	elif spriteAngle > -0.5:
-		if lookAngle.normalized().cross((map_player.translation - translation).normalized()).y < 0:
-			$Sprite.frame = 1
-		else:
-			$Sprite.frame = 3
+	if state == State.DEAD:
+		$Sprite.frame = 4
 	else:
-		$Sprite.frame = 2
+		var spriteAngle = lookAngle.normalized().dot((map_player.translation - translation).normalized())
+		if spriteAngle > 0.5:
+			$Sprite.frame = 0
+		elif spriteAngle > -0.5:
+			if lookAngle.normalized().cross((map_player.translation - translation).normalized()).y < 0:
+				$Sprite.frame = 1
+			else:
+				$Sprite.frame = 3
+		else:
+			$Sprite.frame = 2
+
+func getHitBy(origin, damage):
+	hurt(damage)
+	target = origin
+	if state == State.SLEEPING:
+		state = State.ATTACKING
+
+func hurt(damage):
+	if state != State.DEAD:
+		hp -= damage
+		if hp < 0:
+			hp = 0
+			die()
+
+func die():
+	state = State.DEAD
+	alive = false
+	$CollisionShape.disabled = true

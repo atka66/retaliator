@@ -63,6 +63,7 @@ func positionCamera():
 	$Camera/Weapon.rect_position.y = (-cos(bobbingRotation * 2) * bobbingIntensity) / 2
 
 func shoot():
+	velocity += transform.basis.z * 20
 	$Camera/Anim.play("shoot")
 	
 	for i in range(5):
@@ -74,6 +75,7 @@ func shoot():
 		angle.x += deg2rad(91)
 		hitScan.angle = angle
 		hitScan.origin = self
+		hitScan.damage = 1
 		get_parent().add_child(hitScan)
 
 func DEBUGTEXT():

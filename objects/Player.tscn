@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/hud/visor.png" type="Texture" id=2]
@@ -48,6 +48,47 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -16 ), Vector2( 0, 0 ), Vector2( 4, 16 ), Vector2( 8, 8 ), Vector2( 4, 16 ), Vector2( 0, 0 ) ]
 }
 
+[sub_resource type="Animation" id=3]
+resource_name = "shoot_1"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:shooting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Weapon:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.05 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 4 ), ExtResource( 3 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Weapon:rect_pivot_offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.05, 0.1 ),
+"transitions": PoolRealArray( 0.5, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -4 ), Vector2( 0, 0 ) ]
+}
+
 [sub_resource type="CylinderShape" id=2]
 radius = 2.0
 height = 6.0
@@ -79,6 +120,7 @@ __meta__ = {
 
 [node name="Anim" type="AnimationPlayer" parent="Camera"]
 anims/shoot = SubResource( 1 )
+anims/shoot_1 = SubResource( 3 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
 margin_left = 16.0

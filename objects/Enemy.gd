@@ -7,8 +7,9 @@ enum State {
 	DEAD # dead
 }
 const fov = 180
-var speed = 20
+var speed = 2
 var hp = 10
+var velocity = Vector3.ZERO
 
 var map_player = null
 var map_nav = null
@@ -30,6 +31,17 @@ func _process(delta):
 	if state == State.ATTACKING:
 		approachTarget()
 	determineSprite()
+
+func _physics_process(delta):
+	# reset to 0 on y axis
+	transform.origin.y = 0
+	velocity.y = 0
+	# apply movement
+	#velocity.y -= gravity
+	velocity = move_and_slide(velocity, Vector3.UP)
+	# friction
+	velocity.x *= Global.friction
+	velocity.z *= Global.friction
 
 func checkFront():
 	if target == null && isInSight(map_player):
@@ -54,7 +66,8 @@ func moveTowards(targetPosition):
 	var path = map_nav.get_simple_path(translation, targetPosition)
 	if path.size() > 1:
 		var toTargetVec = path[1] - translation
-		lookAngle = move_and_slide(toTargetVec.normalized() * speed, Vector3.UP).normalized()
+		lookAngle = toTargetVec.normalized()
+		velocity += lookAngle * speed
 
 func determineSprite():
 	if state == State.DEAD:
@@ -72,6 +85,7 @@ func determineSprite():
 			$Sprite.frame = 2
 
 func getHitBy(origin, damage):
+	velocity += origin.translation.direction_to(translation) * damage * 10
 	hurt(damage)
 	target = origin
 	if state == State.SLEEPING:

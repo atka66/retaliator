@@ -1,9 +1,6 @@
 extends KinematicBody
 
 var speed = 5
-var friction = 0.9
-#var gravity = 0.5
-
 var velocity = Vector3.ZERO
 
 var camera_anglev = 0
@@ -12,6 +9,8 @@ var mouseSensVer = mouseSensHor * 0.8
 
 var bobbingRotation = 0
 var alive = true
+
+var selectedWeapon = 0
 export(bool) var shooting = false
 
 func _ready():
@@ -34,8 +33,8 @@ func _physics_process(delta):
 	#velocity.y -= gravity
 	velocity = move_and_slide(velocity, Vector3.UP)
 	# friction
-	velocity.x *= friction
-	velocity.z *= friction
+	velocity.x *= Global.friction
+	velocity.z *= Global.friction
 	# camera tilt on strafe
 	$Camera.rotation_degrees.z = -velocity.rotated(Vector3.UP, -rotation.y).x / 8
 
@@ -45,11 +44,17 @@ func _input(event):
 		$Camera.rotation.x += -deg2rad(movement.y * mouseSensVer)
 		rotation.y += -deg2rad(movement.x * mouseSensHor)
 		$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
-	if event.is_action_pressed("shoot"):
+
+func _process(delta):
+	if !shooting:
+		if Input.is_key_pressed(KEY_0):
+			switchWeapon(0)
+		if Input.is_key_pressed(KEY_1):
+			switchWeapon(1)
+	if Input.is_action_pressed("shoot"):
 		if !shooting:
 			shoot()
 
-func _process(delta):
 	positionCamera()
 	DEBUGTEXT()
 
@@ -63,10 +68,26 @@ func positionCamera():
 	$Camera/Weapon.rect_position.y = (-cos(bobbingRotation * 2) * bobbingIntensity) / 2
 
 func shoot():
-	velocity += transform.basis.z * 20
-	$Camera/Anim.play("shoot")
+	if selectedWeapon == 0:
+		velocity += transform.basis.z * 20
+		$Camera/Anim.play("shoot")
+		
+		for i in range(5):
+			var hitScan = Res.HitScan.instance()
+			hitScan.translation = translation
+			hitScan.translation.y += 3
+			var angle = $Camera.rotation
+			angle.y = rotation.y + ((randf() / 20) - 0.025)
+			angle.x += deg2rad(91)
+			hitScan.angle = angle
+			hitScan.origin = self
+			hitScan.damage = 1
+			get_parent().add_child(hitScan)
 	
-	for i in range(5):
+	if selectedWeapon == 1:
+		velocity += transform.basis.z * 2
+		$Camera/Anim.play("shoot_1")
+	
 		var hitScan = Res.HitScan.instance()
 		hitScan.translation = translation
 		hitScan.translation.y += 3
@@ -80,3 +101,7 @@ func shoot():
 
 func DEBUGTEXT():
 	pass
+
+func switchWeapon(weapon):
+	if selectedWeapon != weapon:
+		selectedWeapon = weapon

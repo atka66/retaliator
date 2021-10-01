@@ -15,6 +15,8 @@ export(bool) var shooting = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	$BgMusic.play()
+	$BgBeat.play("shotgun")
 
 func _physics_process(delta):
 	# reset to 0 on y axis
@@ -51,9 +53,6 @@ func _process(delta):
 			switchWeapon(0)
 		if Input.is_key_pressed(KEY_1):
 			switchWeapon(1)
-	if Input.is_action_pressed("shoot"):
-		if !shooting:
-			shoot()
 
 	positionCamera()
 	DEBUGTEXT()
@@ -68,6 +67,7 @@ func positionCamera():
 	$Camera/Weapon.rect_position.y = (-cos(bobbingRotation * 2) * bobbingIntensity) / 2
 
 func shoot():
+	$Camera/WeaponSound.play()
 	if selectedWeapon == 0:
 		velocity += transform.basis.z * 20
 		$Camera/Anim.play("shoot")
@@ -105,3 +105,8 @@ func DEBUGTEXT():
 func switchWeapon(weapon):
 	if selectedWeapon != weapon:
 		selectedWeapon = weapon
+
+func checkShootShotgun():
+	if Input.is_action_pressed("shoot"):
+		if !shooting:
+			shoot()

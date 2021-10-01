@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/hud/visor.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://sprites/hud/visor_w2.png" type="Texture" id=4]
 [ext_resource path="res://sprites/hud/visor_w3.png" type="Texture" id=5]
 [ext_resource path="res://sprites/hud/visor_w4.png" type="Texture" id=6]
+[ext_resource path="res://sfx/001.ogg" type="AudioStream" id=7]
+[ext_resource path="res://sfx/shotgun_1.ogg" type="AudioStream" id=8]
 
 [sub_resource type="Animation" id=1]
 resource_name = "shoot"
@@ -48,7 +50,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -16 ), Vector2( 0, 0 ), Vector2( 4, 16 ), Vector2( 8, 8 ), Vector2( 4, 16 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "shoot_1"
 length = 0.1
 step = 0.01
@@ -89,9 +91,32 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -4 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="CylinderShape" id=2]
+[sub_resource type="CylinderShape" id=3]
 radius = 2.0
 height = 6.0
+
+[sub_resource type="Animation" id=4]
+resource_name = "shotgun"
+length = 1.333
+loop = true
+step = 0.666
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.666 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "checkShootShotgun"
+}, {
+"args": [  ],
+"method": "checkShootShotgun"
+} ]
+}
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 1 )
@@ -120,7 +145,7 @@ __meta__ = {
 
 [node name="Anim" type="AnimationPlayer" parent="Camera"]
 anims/shoot = SubResource( 1 )
-anims/shoot_1 = SubResource( 3 )
+anims/shoot_1 = SubResource( 2 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
 margin_left = 16.0
@@ -133,6 +158,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="WeaponSound" type="AudioStreamPlayer" parent="Camera"]
+stream = ExtResource( 8 )
+
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
+
+[node name="BgMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[node name="BgBeat" type="AnimationPlayer" parent="."]
+anims/shotgun = SubResource( 4 )

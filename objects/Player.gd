@@ -11,7 +11,8 @@ var bobbingRotation = 0
 var alive = true
 
 var selectedWeapon = 0
-export(bool) var shooting = false
+export(bool) var weaponBusy = false
+var ammo = Global.shotgun_ammo_cap
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -48,7 +49,7 @@ func _input(event):
 		$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
 
 func _process(delta):
-	if !shooting:
+	if !weaponBusy:
 		if Input.is_key_pressed(KEY_0):
 			switchWeapon(0)
 		if Input.is_key_pressed(KEY_1):
@@ -67,27 +68,12 @@ func positionCamera():
 	$Camera/Weapon.rect_position.y = (-cos(bobbingRotation * 2) * bobbingIntensity) / 2
 
 func shoot():
-	$Camera/WeaponSound.play()
-	if selectedWeapon == 0:
-		velocity += transform.basis.z * 20
-		$Camera/Anim.play("shoot")
-		
-		for i in range(5):
-			var hitScan = Res.HitScan.instance()
-			hitScan.translation = translation
-			hitScan.translation.y += 3
-			var angle = $Camera.rotation
-			angle.y = rotation.y + ((randf() / 20) - 0.025)
-			angle.x += deg2rad(91)
-			hitScan.angle = angle
-			hitScan.origin = self
-			hitScan.damage = 1
-			get_parent().add_child(hitScan)
+	ammo -= 1
+
+	velocity += transform.basis.z * 20
+	$Camera/Anim.play("shoot")
 	
-	if selectedWeapon == 1:
-		velocity += transform.basis.z * 2
-		$Camera/Anim.play("shoot_1")
-	
+	for i in range(5):
 		var hitScan = Res.HitScan.instance()
 		hitScan.translation = translation
 		hitScan.translation.y += 3
@@ -99,6 +85,10 @@ func shoot():
 		hitScan.damage = 1
 		get_parent().add_child(hitScan)
 
+func reload():
+	ammo = Global.shotgun_ammo_cap
+	$Camera/Anim.play("reload")
+
 func DEBUGTEXT():
 	pass
 
@@ -107,6 +97,11 @@ func switchWeapon(weapon):
 		selectedWeapon = weapon
 
 func checkShootShotgun():
-	if Input.is_action_pressed("shoot"):
-		if !shooting:
-			shoot()
+	if !weaponBusy:
+		if Input.is_action_pressed("shoot"):
+			if ammo > 0:
+				shoot()
+			else:
+				reload()
+		if Input.is_action_pressed("reload"):
+			reload()

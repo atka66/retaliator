@@ -1,18 +1,76 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/hud/visor.png" type="Texture" id=2]
 [ext_resource path="res://sprites/hud/visor_w1.png" type="Texture" id=3]
 [ext_resource path="res://sprites/hud/visor_w2.png" type="Texture" id=4]
-[ext_resource path="res://sprites/hud/visor_w3.png" type="Texture" id=5]
+[ext_resource path="res://sfx/shotgun_3.ogg" type="AudioStream" id=5]
 [ext_resource path="res://sprites/hud/visor_w4.png" type="Texture" id=6]
 [ext_resource path="res://sfx/001.ogg" type="AudioStream" id=7]
 [ext_resource path="res://sfx/shotgun_1.ogg" type="AudioStream" id=8]
+[ext_resource path="res://sprites/hud/visor_w3.png" type="Texture" id=9]
+[ext_resource path="res://sfx/shotgun_2.ogg" type="AudioStream" id=10]
+
+[sub_resource type="Animation" id=5]
+resource_name = "reload"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:weaponBusy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("WeaponSound:stream")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 10 ), ExtResource( 5 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("WeaponSound")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+}, {
+"args": [ 0.0 ],
+"method": "play"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Weapon:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 9 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 3 ) ]
+}
 
 [sub_resource type="Animation" id=1]
 resource_name = "shoot"
-length = 0.5
-step = 0.01
+length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon:texture")
 tracks/0/interp = 1
@@ -20,19 +78,19 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.05, 0.2, 0.3, 0.4, 0.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.05, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 5 ), ExtResource( 3 ) ]
+"values": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 3 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("..:shooting")
+tracks/1/path = NodePath("..:weaponBusy")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.5 ),
+"times": PoolRealArray( 0, 0.2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
@@ -44,10 +102,36 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.05, 0.15, 0.22, 0.33, 0.4, 0.5 ),
-"transitions": PoolRealArray( 2, 1, 2, 0.5, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.05, 0.15, 0.2 ),
+"transitions": PoolRealArray( 2, 1, 2, 1 ),
 "update": 0,
-"values": [ Vector2( 0, 0 ), Vector2( 0, -16 ), Vector2( 0, 0 ), Vector2( 4, 16 ), Vector2( 8, 8 ), Vector2( 4, 16 ), Vector2( 0, 0 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( 0, -16 ), Vector2( 0, 0 ), Vector2( 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("WeaponSound:stream")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 8 ) ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath("WeaponSound")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.0 ],
+"method": "play"
+} ]
 }
 
 [sub_resource type="Animation" id=2]
@@ -99,7 +183,7 @@ height = 6.0
 resource_name = "shotgun"
 length = 1.333
 loop = true
-step = 0.666
+step = 0.333
 tracks/0/type = "method"
 tracks/0/path = NodePath(".")
 tracks/0/interp = 1
@@ -107,9 +191,15 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.666 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.333, 0.666, 0.999 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
 "values": [ {
+"args": [  ],
+"method": "checkShootShotgun"
+}, {
+"args": [  ],
+"method": "checkShootShotgun"
+}, {
 "args": [  ],
 "method": "checkShootShotgun"
 }, {
@@ -144,6 +234,7 @@ __meta__ = {
 }
 
 [node name="Anim" type="AnimationPlayer" parent="Camera"]
+anims/reload = SubResource( 5 )
 anims/shoot = SubResource( 1 )
 anims/shoot_1 = SubResource( 2 )
 
@@ -159,7 +250,7 @@ __meta__ = {
 }
 
 [node name="WeaponSound" type="AudioStreamPlayer" parent="Camera"]
-stream = ExtResource( 8 )
+stream = ExtResource( 5 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )

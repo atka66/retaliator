@@ -135,8 +135,8 @@ func _on_Conductor_beat(position):
 		Global.gameCntdwn -= 1
 		if Global.gameCntdwn < 1:
 			ConductorNode.playUnmute()
-	
-	if !$Camera/CrosshairAnim.is_playing():
-		$Camera/CrosshairAnim.play("pulse")
+	else:
+		if !$Camera/CrosshairAnim.is_playing():
+			$Camera/CrosshairAnim.play("pulse")
 	var crosshair = Res.CrosshairScene.instance()
 	get_tree().get_current_scene().add_child(crosshair)

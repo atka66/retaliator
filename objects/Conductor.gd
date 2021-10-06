@@ -1,21 +1,19 @@
 extends AudioStreamPlayer
 
 var bpm = 180
-var margin = 0.2
+var margin = 0.25
 
 var secPerBeat
 var songPosition
 var lastReportedBeat = 0
 var songPositionInBeats = 1
 var tmpSongPositionInBeats
-var tmpVolume
+var tmpVolume = volume_db
 
 signal beat(position)
 
 func _ready():
 	secPerBeat = 60.0 / bpm
-	tmpVolume = volume_db
-	volume_db = 0
 
 func _physics_process(delta):
 	if playing:
@@ -34,3 +32,11 @@ func getBeatCheckResult(measure):
 		if songPositionInCurrentBeat < margin || songPositionInCurrentBeat > 1.0 - margin:
 			return 1
 	return 0
+
+func playMute():
+	volume_db = -80
+	play()
+
+func playUnmute():
+	volume_db = tmpVolume
+	seek(0.0)

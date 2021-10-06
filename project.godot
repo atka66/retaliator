@@ -29,6 +29,7 @@ window/size/fullscreen=true
 window/size/test_width=1360
 window/size/test_height=768
 window/stretch/mode="viewport"
+window/stretch/aspect="keep"
 
 [importer_defaults]
 
@@ -51,6 +52,10 @@ texture={
 "size_limit": 0,
 "stream": false,
 "svg/scale": 1.0
+}
+ogg_vorbis={
+"loop": false,
+"loop_offset": 0
 }
 
 [input]

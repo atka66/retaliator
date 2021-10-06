@@ -5,3 +5,5 @@ onready var ImpactPar = preload("res://objects/ImpactPar.tscn")
 
 onready var SoundShotgunShoot = preload("res://sfx/shotgun_1.ogg")
 onready var SoundShotgunReload = preload("res://sfx/shotgun_2.ogg")
+
+onready var CrosshairScene = preload("res://objects/Crosshair.tscn")

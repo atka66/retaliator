@@ -25,14 +25,15 @@ func _physics_process(delta):
 	transform.origin.y = 0
 	velocity.y = 0
 	# input movement
-	if Input.is_action_pressed("forward"):
-		velocity += -transform.basis.z * speed
-	if Input.is_action_pressed("back"):
-		velocity += transform.basis.z * speed
-	if Input.is_action_pressed("strafe_left"):
-		velocity += -transform.basis.x * speed
-	if Input.is_action_pressed("strafe_right"):
-		velocity += transform.basis.x * speed
+	if Global.gameCntdwn < 1: 
+		if Input.is_action_pressed("forward"):
+			velocity += -transform.basis.z * speed
+		if Input.is_action_pressed("back"):
+			velocity += transform.basis.z * speed
+		if Input.is_action_pressed("strafe_left"):
+			velocity += -transform.basis.x * speed
+		if Input.is_action_pressed("strafe_right"):
+			velocity += transform.basis.x * speed
 	# apply movement
 	#velocity.y -= gravity
 	velocity = move_and_slide(velocity, Vector3.UP)
@@ -49,16 +50,25 @@ func _input(event):
 		rotation.y += -deg2rad(movement.x * mouseSensHor)
 		$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
 		
-	if !weaponBusy:
-		if event.is_action_pressed("shoot"):
-			if ConductorNode.getBeatCheckResult(0):
-				if ammo > 0:
-					shoot()
+	if Global.gameCntdwn < 1:
+		if !weaponBusy:
+			if event.is_action_pressed("shoot"):
+				if ConductorNode.getBeatCheckResult(0):
+					if ammo > 0:
+						shoot()
+					else:
+						reload()
 				else:
+					$Camera/CrosshairAnim.play("fail")
+			if event.is_action_pressed("reload"):
+				if ConductorNode.getBeatCheckResult(0):
 					reload()
-		if event.is_action_pressed("reload"):
-			if ConductorNode.getBeatCheckResult(0):
-				reload()
+				else:
+					$Camera/CrosshairAnim.play("fail")
+	else:
+		if event.is_action_pressed("shoot"):
+			if !ConductorNode.playing:
+				ConductorNode.playMute()
 
 func _process(delta):
 	if !weaponBusy:
@@ -110,4 +120,23 @@ func switchWeapon(weapon):
 
 
 func _on_Conductor_beat(position):
-	$Camera/BeatAnim.play("shotgun")
+	if Global.gameCntdwn > 0:
+		if Global.gameCntdwn == 5:
+			$Camera/WeaponAnim.play("cntdwn1")
+		if Global.gameCntdwn == 4:
+			$Camera/WeaponAnim.play("cntdwn2")
+		if Global.gameCntdwn == 3:
+			$Camera/WeaponAnim.play("cntdwn3")
+		if Global.gameCntdwn == 2:
+			$Camera/WeaponAnim.play("cntdwn4")
+		if Global.gameCntdwn == 1:
+			$Camera/WeaponAnim.play("draw")
+		
+		Global.gameCntdwn -= 1
+		if Global.gameCntdwn < 1:
+			ConductorNode.playUnmute()
+	
+	if !$Camera/CrosshairAnim.is_playing():
+		$Camera/CrosshairAnim.play("pulse")
+	var crosshair = Res.CrosshairScene.instance()
+	get_tree().get_current_scene().add_child(crosshair)

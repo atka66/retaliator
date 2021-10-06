@@ -1,5 +1,7 @@
 extends KinematicBody
 
+var ConductorNode
+
 var speed = 5
 var velocity = Vector3.ZERO
 
@@ -15,9 +17,8 @@ export(bool) var weaponBusy = false
 var ammo = Global.shotgun_ammo_cap
 
 func _ready():
+	ConductorNode = get_tree().get_nodes_in_group('conductor')[0]
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	$BgMusic.play()
-	$BgBeat.play("shotgun")
 
 func _physics_process(delta):
 	# reset to 0 on y axis
@@ -47,6 +48,17 @@ func _input(event):
 		$Camera.rotation.x += -deg2rad(movement.y * mouseSensVer)
 		rotation.y += -deg2rad(movement.x * mouseSensHor)
 		$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
+		
+	if !weaponBusy:
+		if event.is_action_pressed("shoot"):
+			if ConductorNode.getBeatCheckResult(0):
+				if ammo > 0:
+					shoot()
+				else:
+					reload()
+		if event.is_action_pressed("reload"):
+			if ConductorNode.getBeatCheckResult(0):
+				reload()
 
 func _process(delta):
 	if !weaponBusy:
@@ -71,7 +83,7 @@ func shoot():
 	ammo -= 1
 
 	velocity += transform.basis.z * 20
-	$Camera/Anim.play("shoot")
+	$Camera/WeaponAnim.play("shoot")
 	
 	for i in range(5):
 		var hitScan = Res.HitScan.instance()
@@ -87,7 +99,7 @@ func shoot():
 
 func reload():
 	ammo = Global.shotgun_ammo_cap
-	$Camera/Anim.play("reload")
+	$Camera/WeaponAnim.play("reload")
 
 func DEBUGTEXT():
 	pass
@@ -96,12 +108,6 @@ func switchWeapon(weapon):
 	if selectedWeapon != weapon:
 		selectedWeapon = weapon
 
-func checkShootShotgun():
-	if !weaponBusy:
-		if Input.is_action_pressed("shoot"):
-			if ammo > 0:
-				shoot()
-			else:
-				reload()
-		if Input.is_action_pressed("reload"):
-			reload()
+
+func _on_Conductor_beat(position):
+	$Camera/BeatAnim.play("shotgun")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/hud/visor.png" type="Texture" id=2]
@@ -6,12 +6,11 @@
 [ext_resource path="res://sprites/hud/visor_w2.png" type="Texture" id=4]
 [ext_resource path="res://sfx/shotgun_3.ogg" type="AudioStream" id=5]
 [ext_resource path="res://sprites/hud/visor_w4.png" type="Texture" id=6]
-[ext_resource path="res://sfx/001.ogg" type="AudioStream" id=7]
 [ext_resource path="res://sfx/shotgun_1.ogg" type="AudioStream" id=8]
 [ext_resource path="res://sprites/hud/visor_w3.png" type="Texture" id=9]
 [ext_resource path="res://sfx/shotgun_2.ogg" type="AudioStream" id=10]
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=1]
 resource_name = "reload"
 length = 0.5
 tracks/0/type = "value"
@@ -68,8 +67,7 @@ tracks/3/keys = {
 "values": [ ExtResource( 9 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 3 ) ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "shoot"
+[sub_resource type="Animation" id=2]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon:texture")
@@ -134,8 +132,7 @@ tracks/4/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "shoot_1"
+[sub_resource type="Animation" id=3]
 length = 0.1
 step = 0.01
 tracks/0/type = "value"
@@ -175,38 +172,61 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -4 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="CylinderShape" id=3]
-radius = 2.0
-height = 6.0
-
 [sub_resource type="Animation" id=4]
-resource_name = "shotgun"
-length = 1.333
-loop = true
-step = 0.333
-tracks/0/type = "method"
-tracks/0/path = NodePath(".")
+length = 0.333
+step = 0.033
+tracks/0/type = "value"
+tracks/0/path = NodePath("CrosshairLeft:default_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.333, 0.666, 0.999 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
-"values": [ {
-"args": [  ],
-"method": "checkShootShotgun"
-}, {
-"args": [  ],
-"method": "checkShootShotgun"
-}, {
-"args": [  ],
-"method": "checkShootShotgun"
-}, {
-"args": [  ],
-"method": "checkShootShotgun"
-} ]
+"times": PoolRealArray( 0, 0.33 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("CrosshairRight:default_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.33 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("CrosshairLeft:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.33 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 512, 384 ), Vector2( 640, 384 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("CrosshairRight:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.33 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 768, 384 ), Vector2( 640, 384 ) ]
+}
+
+[sub_resource type="CylinderShape" id=5]
+radius = 2.0
+height = 6.0
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 1 )
@@ -233,10 +253,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Anim" type="AnimationPlayer" parent="Camera"]
-anims/reload = SubResource( 5 )
-anims/shoot = SubResource( 1 )
-anims/shoot_1 = SubResource( 2 )
+[node name="WeaponAnim" type="AnimationPlayer" parent="Camera"]
+anims/reload = SubResource( 1 )
+anims/shoot = SubResource( 2 )
+anims/shoot_1 = SubResource( 3 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
 margin_left = 16.0
@@ -250,14 +270,23 @@ __meta__ = {
 }
 
 [node name="WeaponSound" type="AudioStreamPlayer" parent="Camera"]
-stream = ExtResource( 5 )
+stream = ExtResource( 8 )
+
+[node name="CrosshairLeft" type="Line2D" parent="Camera"]
+position = Vector2( 512, 384 )
+points = PoolVector2Array( 0, -32, -32, 0, 0, 32 )
+width = 3.0
+default_color = Color( 1, 1, 1, 0 )
+
+[node name="CrosshairRight" type="Line2D" parent="Camera"]
+position = Vector2( 768, 384 )
+points = PoolVector2Array( 0, -32, 32, 0, 0, 32 )
+width = 3.0
+default_color = Color( 1, 1, 1, 0 )
+
+[node name="BeatAnim" type="AnimationPlayer" parent="Camera"]
+anims/shotgun = SubResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
-shape = SubResource( 3 )
-
-[node name="BgMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 7 )
-
-[node name="BgBeat" type="AnimationPlayer" parent="."]
-anims/shotgun = SubResource( 4 )
+shape = SubResource( 5 )

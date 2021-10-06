@@ -496,6 +496,7 @@ anims/shoot = SubResource( 2 )
 anims/shoot_1 = SubResource( 3 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
+visible = false
 margin_left = 16.0
 margin_top = 16.0
 margin_right = 272.0

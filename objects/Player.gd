@@ -121,15 +121,11 @@ func switchWeapon(weapon):
 
 func _on_Conductor_beat(position):
 	if Global.gameCntdwn > 0:
-		if Global.gameCntdwn == 5:
-			$Camera/WeaponAnim.play("cntdwn1")
-		if Global.gameCntdwn == 4:
-			$Camera/WeaponAnim.play("cntdwn2")
-		if Global.gameCntdwn == 3:
-			$Camera/WeaponAnim.play("cntdwn3")
-		if Global.gameCntdwn == 2:
-			$Camera/WeaponAnim.play("cntdwn4")
+		if Global.gameCntdwn > 1:
+			showCount(str(Global.gameCntdwn - 1), 8)
+			$Camera/WeaponAnim.play("cntdwn" + str(6 - Global.gameCntdwn))
 		if Global.gameCntdwn == 1:
+			showCount("go!", 12)
 			$Camera/WeaponAnim.play("draw")
 		
 		Global.gameCntdwn -= 1
@@ -140,3 +136,13 @@ func _on_Conductor_beat(position):
 			$Camera/CrosshairAnim.play("pulse")
 	var crosshair = Res.CrosshairScene.instance()
 	get_tree().get_current_scene().add_child(crosshair)
+
+func showCount(cnt, size):
+	var label = Res.CustomLabelScene.instance()
+	label.position = Vector2(640, 224)
+	label.text = cnt
+	label.fontSize = size
+	label.outline = true
+	label.aliveTime = 0.3
+	label.alignment = Label.ALIGN_CENTER
+	add_child(label)

@@ -8,3 +8,4 @@ onready var SoundShotgunReload = preload("res://sfx/shotgun_2.ogg")
 
 onready var CrosshairScene = preload("res://objects/Crosshair.tscn")
 onready var CustomLabelScene = preload("res://objects/CustomLabel.tscn")
+onready var ProjectileScene = preload("res://objects/Projectile.tscn")

@@ -1,5 +1,7 @@
 extends KinematicBody
 
+var MapNode
+var ConductorNode
 enum State {
 	SLEEPING, # unalerted
 	SEARCHING, # alerted, approaching target
@@ -7,7 +9,7 @@ enum State {
 	DEAD # dead
 }
 const fov = 180
-var speed = 4
+var speed = 3
 var hp = 10
 var velocity = Vector3.ZERO
 
@@ -20,6 +22,9 @@ export(State) var state = State.SLEEPING
 var target = null
 
 func _ready():
+	MapNode = get_tree().get_nodes_in_group('conductor')[0]
+	ConductorNode = get_tree().get_nodes_in_group('conductor')[0]
+	ConductorNode.connect("beat", self, "_on_Conductor_beat")
 	map_player = get_tree().get_nodes_in_group('player')[0]
 	map_nav = get_tree().get_nodes_in_group('navigation')[0]
 
@@ -102,3 +107,14 @@ func die():
 	state = State.DEAD
 	alive = false
 	$CollisionShape.disabled = true
+
+func _on_Conductor_beat():
+	if state == State.ATTACKING:
+		if randi() % 10 == 0:
+			shoot()
+func shoot():
+	var projectile = Res.ProjectileScene.instance()
+	projectile.origin = self
+	projectile.transform = transform.translated(Vector3(0, 3, 0))
+	projectile.direction = (target.translation - translation).normalized()
+	MapNode.add_child(projectile)

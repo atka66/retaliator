@@ -11,7 +11,9 @@ polygons = [ PoolIntArray( 3, 2, 0 ), PoolIntArray( 0, 2, 1 ), PoolIntArray( 7, 
 cell/size = 1.0
 cell/height = 0.1
 
-[node name="Map1" type="Spatial"]
+[node name="Map1" type="Spatial" groups=[
+"map",
+]]
 
 [node name="Conductor" parent="." instance=ExtResource( 4 )]
 

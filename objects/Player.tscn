@@ -481,6 +481,12 @@ position = Vector2( 80, 660 )
 fontSize = 3
 animate = false
 
+[node name="ReadyLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
+position = Vector2( 640, 160 )
+text = "press 'fire' to start"
+fontSize = 2
+alignment = 1
+
 [node name="WeaponAnim" type="AnimationPlayer" parent="Camera"]
 anims/cntdwn1 = SubResource( 3 )
 anims/cntdwn2 = SubResource( 4 )

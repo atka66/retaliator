@@ -69,6 +69,7 @@ func _input(event):
 		if event.is_action_pressed("shoot"):
 			if !ConductorNode.playing:
 				ConductorNode.playMute()
+				$Camera/Visor/ReadyLabel.time_disappear()
 
 func _process(delta):
 	if !weaponBusy:
@@ -143,10 +144,11 @@ func showCount(cnt, size):
 	label.position = Vector2(640, 224)
 	label.text = cnt
 	label.fontSize = size
-	label.outline = true
+	#label.outline = true
 	label.aliveTime = 0.3
 	label.alignment = Label.ALIGN_CENTER
-	add_child(label)
+	$Camera/Visor.add_child(label)
 
 func renderVisor():
-	$Camera/Visor/AmmoLabel.set_text(str(ammo) + '/' + str(Global.shotgun_ammo_cap))
+	if Global.gameCntdwn == 0:
+		$Camera/Visor/AmmoLabel.set_text(str(ammo) + '/' + str(Global.shotgun_ammo_cap))

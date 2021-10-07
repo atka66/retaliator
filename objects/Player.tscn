@@ -522,20 +522,20 @@ alignment = 1
 
 [node name="AmmoLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 80, 660 )
-fontSize = 3
+position = Vector2( 64, 660 )
+fontSize = 4
 animate = false
 
 [node name="AmmoSlashLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 92, 670 )
-fontSize = 3
+position = Vector2( 80, 672 )
+fontSize = 4
 animate = false
 
 [node name="AmmoCapLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 104, 680 )
-fontSize = 3
+position = Vector2( 96, 684 )
+fontSize = 4
 animate = false
 
 [node name="AmmoAnim" type="AnimationPlayer" parent="Camera/Visor"]

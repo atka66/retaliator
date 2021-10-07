@@ -1,7 +1,6 @@
 [gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
-[ext_resource path="res://sprites/hud/visor.png" type="Texture" id=2]
 [ext_resource path="res://sprites/hud/visor_w1.png" type="Texture" id=3]
 [ext_resource path="res://sprites/hud/visor_w2.png" type="Texture" id=4]
 [ext_resource path="res://sfx/shotgun_3.ogg" type="AudioStream" id=5]
@@ -15,8 +14,9 @@
 [ext_resource path="res://sprites/hud/hand/HANDC0.png" type="Texture" id=13]
 [ext_resource path="res://sfx/knuckled.ogg" type="AudioStream" id=14]
 [ext_resource path="res://sfx/draw.ogg" type="AudioStream" id=15]
+[ext_resource path="res://objects/CustomLabel.tscn" type="PackedScene" id=16]
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=3]
 resource_name = "cntdwn1"
 length = 0.3
 step = 0.05
@@ -71,7 +71,7 @@ tracks/3/keys = {
 "values": [ ExtResource( 14 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=4]
 resource_name = "cntdwn2"
 length = 0.15
 step = 0.05
@@ -100,7 +100,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -64 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=5]
 resource_name = "cntdwn3"
 length = 0.3
 step = 0.05
@@ -167,7 +167,7 @@ tracks/4/keys = {
 "values": [ ExtResource( 14 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=6]
 resource_name = "cntdwn4"
 length = 0.15
 step = 0.05
@@ -208,7 +208,7 @@ tracks/2/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=7]
 resource_name = "draw"
 length = 0.2
 tracks/0/type = "value"
@@ -262,8 +262,7 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "reload"
+[sub_resource type="Animation" id=8]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:weaponBusy")
@@ -319,7 +318,7 @@ tracks/3/keys = {
 "values": [ ExtResource( 9 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 3 ) ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=9]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon:texture")
@@ -384,7 +383,7 @@ tracks/4/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=10]
 length = 0.1
 step = 0.01
 tracks/0/type = "value"
@@ -424,8 +423,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -4 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
-resource_name = "fail"
+[sub_resource type="Animation" id=11]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -441,8 +439,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=6]
-resource_name = "pulse"
+[sub_resource type="Animation" id=12]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("CrosshairAnim/Crosshair:width")
@@ -457,7 +454,7 @@ tracks/0/keys = {
 "values": [ 8.0, 2.0 ]
 }
 
-[sub_resource type="CylinderShape" id=5]
+[sub_resource type="CylinderShape" id=13]
 radius = 2.0
 height = 6.0
 
@@ -476,24 +473,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Visor" type="TextureRect" parent="Camera"]
-margin_right = 160.0
-margin_bottom = 96.0
-rect_scale = Vector2( 8, 8 )
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Visor" type="Node2D" parent="Camera"]
+
+[node name="AmmoLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
+use_parent_material = true
+position = Vector2( 80, 660 )
+fontSize = 3
+animate = false
 
 [node name="WeaponAnim" type="AnimationPlayer" parent="Camera"]
-anims/cntdwn1 = SubResource( 8 )
-anims/cntdwn2 = SubResource( 9 )
-anims/cntdwn3 = SubResource( 10 )
-anims/cntdwn4 = SubResource( 11 )
-anims/draw = SubResource( 12 )
-anims/reload = SubResource( 1 )
-anims/shoot = SubResource( 2 )
-anims/shoot_1 = SubResource( 3 )
+anims/cntdwn1 = SubResource( 3 )
+anims/cntdwn2 = SubResource( 4 )
+anims/cntdwn3 = SubResource( 5 )
+anims/cntdwn4 = SubResource( 6 )
+anims/draw = SubResource( 7 )
+anims/reload = SubResource( 8 )
+anims/shoot = SubResource( 9 )
+anims/shoot_1 = SubResource( 10 )
 
 [node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
 visible = false
@@ -511,8 +507,8 @@ __meta__ = {
 stream = ExtResource( 5 )
 
 [node name="CrosshairAnim" type="AnimationPlayer" parent="Camera"]
-anims/fail = SubResource( 7 )
-anims/pulse = SubResource( 6 )
+anims/fail = SubResource( 11 )
+anims/pulse = SubResource( 12 )
 
 [node name="Crosshair" type="Line2D" parent="Camera/CrosshairAnim"]
 position = Vector2( 640, 384 )
@@ -523,4 +519,4 @@ begin_cap_mode = 1
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
-shape = SubResource( 5 )
+shape = SubResource( 13 )

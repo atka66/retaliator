@@ -7,7 +7,7 @@ enum State {
 	DEAD # dead
 }
 const fov = 180
-var speed = 2
+var speed = 4
 var hp = 10
 var velocity = Vector3.ZERO
 

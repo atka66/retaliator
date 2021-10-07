@@ -48,21 +48,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -40 )
 [node name="Enemy3" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -40 )
 
-[node name="Enemy4" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -72 )
-
-[node name="Enemy5" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -72 )
-
-[node name="Enemy6" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -96 )
-
-[node name="Enemy7" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -96 )
-
-[node name="Enemy8" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -96 )
-
 [node name="Enemy9" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -72 )
 
@@ -92,9 +77,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -152 )
 
 [node name="Enemy18" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, -176 )
-
-[node name="Enemy19" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -176 )
 
 [node name="Enemy20" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, -176 )

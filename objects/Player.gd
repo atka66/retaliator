@@ -79,6 +79,7 @@ func _process(delta):
 
 	positionCamera()
 	DEBUGTEXT()
+	renderVisor()
 
 func positionCamera():
 	var planarVel = velocity
@@ -146,3 +147,6 @@ func showCount(cnt, size):
 	label.aliveTime = 0.3
 	label.alignment = Label.ALIGN_CENTER
 	add_child(label)
+
+func renderVisor():
+	$Camera/Visor/AmmoLabel.set_text(str(ammo) + '/' + str(Global.shotgun_ammo_cap))

@@ -18,6 +18,7 @@ var ammo = Global.shotgun_ammo_cap
 
 func _ready():
 	ConductorNode = get_tree().get_nodes_in_group('conductor')[0]
+	ConductorNode.connect("beat", self, "_on_Conductor_beat")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta):
@@ -53,7 +54,7 @@ func _input(event):
 	if Global.gameCntdwn < 1:
 		if !weaponBusy:
 			if event.is_action_pressed("shoot"):
-				if ConductorNode.getBeatCheckResult(0):
+				if ConductorNode.getBeatCheckResult():
 					if ammo > 0:
 						shoot()
 					else:
@@ -62,7 +63,7 @@ func _input(event):
 				else:
 					$Camera/CrosshairAnim.play("fail")
 			if event.is_action_pressed("reload"):
-				if ConductorNode.getBeatCheckResult(0):
+				if ConductorNode.getBeatCheckResult():
 					reload()
 				else:
 					$Camera/CrosshairAnim.play("fail")
@@ -122,7 +123,7 @@ func switchWeapon(weapon):
 		selectedWeapon = weapon
 
 
-func _on_Conductor_beat(position):
+func _on_Conductor_beat():
 	if Global.gameCntdwn > 0:
 		if Global.gameCntdwn > 1:
 			showCount(str(Global.gameCntdwn - 1), 8)

@@ -517,7 +517,7 @@ __meta__ = {
 [node name="ReadyLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 position = Vector2( 640, 160 )
 text = "press 'fire' to start"
-fontSize = 2
+fontSize = 3
 alignment = 1
 
 [node name="AmmoLabel" parent="Camera/Visor" instance=ExtResource( 16 )]

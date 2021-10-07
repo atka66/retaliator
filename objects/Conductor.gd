@@ -10,7 +10,7 @@ var songPositionInBeats = 1
 var tmpSongPositionInBeats
 var tmpVolume = volume_db
 
-signal beat(position)
+signal beat()
 
 func _ready():
 	secPerBeat = 60.0 / bpm
@@ -23,10 +23,10 @@ func _physics_process(delta):
 			lastReportedBeat = 0
 		songPositionInBeats = tmpSongPositionInBeats
 		if lastReportedBeat < songPositionInBeats:
-			emit_signal("beat", songPositionInBeats)
+			emit_signal("beat")
 			lastReportedBeat = songPositionInBeats
 
-func getBeatCheckResult(measure):
+func getBeatCheckResult():
 	if playing:
 		var songPositionInCurrentBeat = fmod(songPosition / secPerBeat, songPositionInBeats)
 		if songPositionInCurrentBeat < margin || songPositionInCurrentBeat > 1.0 - margin:

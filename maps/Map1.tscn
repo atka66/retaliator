@@ -92,5 +92,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 0, -88 )
 
 [node name="Enemy24" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 56, 0, -88 )
-
-[connection signal="beat" from="Conductor" to="Player" method="_on_Conductor_beat"]

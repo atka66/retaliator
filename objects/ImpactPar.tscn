@@ -10,13 +10,13 @@ gravity = Vector3( 0, -20, 0 )
 initial_velocity = 10.0
 initial_velocity_random = 1.0
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=2]
 flags_unshaded = true
 vertex_color_use_as_albedo = true
 
-[sub_resource type="CubeMesh" id=2]
-material = SubResource( 3 )
-size = Vector3( 0.1, 0.1, 0.1 )
+[sub_resource type="CubeMesh" id=3]
+material = SubResource( 2 )
+size = Vector3( 0.2, 0.2, 0.2 )
 
 [node name="ImpactPar" type="Particles"]
 emitting = false
@@ -26,5 +26,5 @@ one_shot = true
 explosiveness = 1.0
 local_coords = false
 process_material = SubResource( 1 )
-draw_pass_1 = SubResource( 2 )
+draw_pass_1 = SubResource( 3 )
 script = ExtResource( 1 )

@@ -57,7 +57,8 @@ func _input(event):
 					if ammo > 0:
 						shoot()
 					else:
-						reload()
+						$Camera/Visor/AmmoAnim.play("empty")
+						$Camera/CrosshairAnim.play("fail")
 				else:
 					$Camera/CrosshairAnim.play("fail")
 			if event.is_action_pressed("reload"):
@@ -151,4 +152,6 @@ func showCount(cnt, size):
 
 func renderVisor():
 	if Global.gameCntdwn == 0:
-		$Camera/Visor/AmmoLabel.set_text(str(ammo) + '/' + str(Global.shotgun_ammo_cap))
+		$Camera/Visor/AmmoLabel.set_text(str(ammo))
+		$Camera/Visor/AmmoSlashLabel.set_text('/')
+		$Camera/Visor/AmmoCapLabel.set_text(str(Global.shotgun_ammo_cap))

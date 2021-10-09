@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
+[ext_resource path="res://sfx/death.ogg" type="AudioStream" id=2]
 [ext_resource path="res://sprites/hud/visor_w1.png" type="Texture" id=3]
 [ext_resource path="res://sprites/hud/visor_w2.png" type="Texture" id=4]
 [ext_resource path="res://sfx/shotgun_3.ogg" type="AudioStream" id=5]
@@ -16,11 +17,41 @@
 [ext_resource path="res://sfx/draw.ogg" type="AudioStream" id=15]
 [ext_resource path="res://objects/CustomLabel.tscn" type="PackedScene" id=16]
 
-[sub_resource type="Animation" id=12]
-resource_name = "empty"
+[sub_resource type="Animation" id=1]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "hurt"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.501961 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
 length = 0.3
 tracks/0/type = "method"
-tracks/0/path = NodePath("AmmoLabel")
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -43,8 +74,34 @@ tracks/0/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "cntdwn1"
+[sub_resource type="Animation" id=4]
+resource_name = "hurt"
+length = 0.5
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"values": [ {
+"args": [ Color( 1, 0, 0, 1 ) ],
+"method": "set_color"
+}, {
+"args": [ Color( 1, 1, 1, 1 ) ],
+"method": "set_color"
+}, {
+"args": [ Color( 1, 0, 0, 1 ) ],
+"method": "set_color"
+}, {
+"args": [ Color( 1, 1, 1, 1 ) ],
+"method": "set_color"
+} ]
+}
+
+[sub_resource type="Animation" id=5]
 length = 0.3
 step = 0.05
 tracks/0/type = "value"
@@ -98,8 +155,7 @@ tracks/3/keys = {
 "values": [ ExtResource( 14 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "cntdwn2"
+[sub_resource type="Animation" id=6]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -127,8 +183,7 @@ tracks/1/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -64 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "cntdwn3"
+[sub_resource type="Animation" id=7]
 length = 0.3
 step = 0.05
 tracks/0/type = "value"
@@ -194,8 +249,7 @@ tracks/4/keys = {
 "values": [ ExtResource( 14 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "cntdwn4"
+[sub_resource type="Animation" id=8]
 length = 0.15
 step = 0.05
 tracks/0/type = "value"
@@ -235,8 +289,7 @@ tracks/2/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "draw"
+[sub_resource type="Animation" id=9]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon:texture")
@@ -289,7 +342,7 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=10]
 length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("..:weaponBusy")
@@ -345,7 +398,7 @@ tracks/3/keys = {
 "values": [ ExtResource( 9 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 3 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=11]
 length = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Weapon:texture")
@@ -410,7 +463,7 @@ tracks/4/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=12]
 length = 0.1
 step = 0.01
 tracks/0/type = "value"
@@ -450,7 +503,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 0 ), Vector2( 0, -4 ), Vector2( 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=13]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -478,7 +531,7 @@ tracks/1/keys = {
 "values": [ 10.0, 2.0 ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=14]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("CrosshairAnim/Crosshair:width")
@@ -493,7 +546,7 @@ tracks/0/keys = {
 "values": [ 8.0, 2.0 ]
 }
 
-[sub_resource type="CylinderShape" id=11]
+[sub_resource type="CylinderShape" id=15]
 radius = 2.0
 height = 6.0
 
@@ -508,11 +561,25 @@ far = 2048.0
 margin_right = 320.0
 margin_bottom = 192.0
 rect_scale = Vector2( 4, 4 )
+rect_pivot_offset = Vector2( -128, -128 )
+texture = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Visor" type="Node2D" parent="Camera"]
+
+[node name="Fade" type="ColorRect" parent="Camera/Visor"]
+margin_right = 1280.0
+margin_bottom = 768.0
+color = Color( 1, 1, 1, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Anim" type="AnimationPlayer" parent="Camera/Visor/Fade"]
+anims/die = SubResource( 1 )
+anims/hurt = SubResource( 2 )
 
 [node name="ReadyLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 position = Vector2( 640, 160 )
@@ -522,53 +589,49 @@ alignment = 1
 
 [node name="AmmoLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 64, 660 )
+position = Vector2( 1152, 660 )
 fontSize = 4
 animate = false
 
+[node name="Anim" type="AnimationPlayer" parent="Camera/Visor/AmmoLabel"]
+anims/empty = SubResource( 3 )
+
 [node name="AmmoSlashLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 80, 672 )
+position = Vector2( 1168, 672 )
 fontSize = 4
 animate = false
 
 [node name="AmmoCapLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
-position = Vector2( 96, 684 )
+position = Vector2( 1184, 684 )
 fontSize = 4
 animate = false
 
-[node name="AmmoAnim" type="AnimationPlayer" parent="Camera/Visor"]
-anims/empty = SubResource( 12 )
+[node name="HpLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
+position = Vector2( 96, 660 )
+fontSize = 5
+animate = false
+
+[node name="Anim" type="AnimationPlayer" parent="Camera/Visor/HpLabel"]
+anims/hurt = SubResource( 4 )
 
 [node name="WeaponAnim" type="AnimationPlayer" parent="Camera"]
-anims/cntdwn1 = SubResource( 1 )
-anims/cntdwn2 = SubResource( 2 )
-anims/cntdwn3 = SubResource( 3 )
-anims/cntdwn4 = SubResource( 4 )
-anims/draw = SubResource( 5 )
-anims/reload = SubResource( 6 )
-anims/shoot = SubResource( 7 )
-anims/shoot_1 = SubResource( 8 )
-
-[node name="DEBUG_TEXT_LEFT" type="RichTextLabel" parent="Camera"]
-visible = false
-margin_left = 16.0
-margin_top = 16.0
-margin_right = 272.0
-margin_bottom = 208.0
-rect_scale = Vector2( 2, 2 )
-text = "debug"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+anims/cntdwn1 = SubResource( 5 )
+anims/cntdwn2 = SubResource( 6 )
+anims/cntdwn3 = SubResource( 7 )
+anims/cntdwn4 = SubResource( 8 )
+anims/draw = SubResource( 9 )
+anims/reload = SubResource( 10 )
+anims/shoot = SubResource( 11 )
+anims/shoot_1 = SubResource( 12 )
 
 [node name="WeaponSound" type="AudioStreamPlayer" parent="Camera"]
-stream = ExtResource( 5 )
+stream = ExtResource( 15 )
 
 [node name="CrosshairAnim" type="AnimationPlayer" parent="Camera"]
-anims/fail = SubResource( 9 )
-anims/pulse = SubResource( 10 )
+anims/fail = SubResource( 13 )
+anims/pulse = SubResource( 14 )
 
 [node name="Crosshair" type="Line2D" parent="Camera/CrosshairAnim"]
 position = Vector2( 640, 384 )
@@ -579,4 +642,8 @@ begin_cap_mode = 1
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
-shape = SubResource( 11 )
+shape = SubResource( 15 )
+
+[node name="HurtSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = 5.0

@@ -11,6 +11,7 @@ var mouseSensVer = mouseSensHor * 0.8
 
 var bobbingRotation = 0
 var alive = true
+var hp = 5
 
 var selectedWeapon = 0
 export(bool) var weaponBusy = false
@@ -26,7 +27,7 @@ func _physics_process(delta):
 	transform.origin.y = 0
 	velocity.y = 0
 	# input movement
-	if Global.gameCntdwn < 1: 
+	if Global.gameCntdwn < 1 && alive: 
 		if Input.is_action_pressed("forward"):
 			velocity += -transform.basis.z * speed
 		if Input.is_action_pressed("back"):
@@ -45,33 +46,34 @@ func _physics_process(delta):
 	$Camera.rotation_degrees.z = -velocity.rotated(Vector3.UP, -rotation.y).x / 8
 
 func _input(event):
-	if event is InputEventMouseMotion:
-		var movement = event.relative
-		$Camera.rotation.x += -deg2rad(movement.y * mouseSensVer)
-		rotation.y += -deg2rad(movement.x * mouseSensHor)
-		$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
-		
-	if Global.gameCntdwn < 1:
-		if !weaponBusy:
-			if event.is_action_pressed("shoot"):
-				if ConductorNode.getBeatCheckResult():
-					if ammo > 0:
-						shoot()
+	if alive:
+		if event is InputEventMouseMotion:
+			var movement = event.relative
+			$Camera.rotation.x += -deg2rad(movement.y * mouseSensVer)
+			rotation.y += -deg2rad(movement.x * mouseSensHor)
+			$Camera.rotation.x = max(min($Camera.rotation.x, 1.5), -1.5)
+			
+		if Global.gameCntdwn < 1:
+			if !weaponBusy:
+				if event.is_action_pressed("shoot"):
+					if ConductorNode.getBeatCheckResult():
+						if ammo > 0:
+							shoot()
+						else:
+							$Camera/Visor/AmmoLabel/Anim.play("empty")
+							$Camera/CrosshairAnim.play("fail")
 					else:
-						$Camera/Visor/AmmoAnim.play("empty")
 						$Camera/CrosshairAnim.play("fail")
-				else:
-					$Camera/CrosshairAnim.play("fail")
-			if event.is_action_pressed("reload"):
-				if ConductorNode.getBeatCheckResult():
-					reload()
-				else:
-					$Camera/CrosshairAnim.play("fail")
-	else:
-		if event.is_action_pressed("shoot"):
-			if !ConductorNode.playing:
-				ConductorNode.playMute()
-				$Camera/Visor/ReadyLabel.time_disappear()
+				if event.is_action_pressed("reload"):
+					if ConductorNode.getBeatCheckResult():
+						reload()
+					else:
+						$Camera/CrosshairAnim.play("fail")
+		else:
+			if event.is_action_pressed("shoot"):
+				if !ConductorNode.playing:
+					ConductorNode.playMute()
+					$Camera/Visor/ReadyLabel.time_disappear()
 
 func _process(delta):
 	if !weaponBusy:
@@ -156,3 +158,20 @@ func renderVisor():
 		$Camera/Visor/AmmoLabel.set_text(str(ammo))
 		$Camera/Visor/AmmoSlashLabel.set_text('/')
 		$Camera/Visor/AmmoCapLabel.set_text(str(Global.shotgun_ammo_cap))
+		$Camera/Visor/HpLabel.set_text(str(hp))
+
+func hurt(damage):
+	if alive:
+		hp -= damage
+		if hp < 1:
+			hp = 0
+			die()
+		else:
+			$Camera/Visor/HpLabel/Anim.play("hurt")
+			$Camera/Visor/Fade/Anim.play("hurt")
+
+func die():
+	$Camera/Visor/Fade/Anim.play("die")
+	$HurtSound.play()
+	alive = false
+	ConductorNode.stop()

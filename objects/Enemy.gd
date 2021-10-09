@@ -99,7 +99,7 @@ func getHitBy(origin, damage):
 func hurt(damage):
 	if state != State.DEAD:
 		hp -= damage
-		if hp < 0:
+		if hp < 1:
 			hp = 0
 			die()
 

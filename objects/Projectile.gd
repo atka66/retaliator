@@ -3,7 +3,7 @@ extends Area
 var origin
 var direction = Vector3.ONE
 var speed = 60
-var damage = 4
+var damage = 1
 
 func _physics_process(delta):
 	#look_at(transform.origin + direction, Vector3.UP)

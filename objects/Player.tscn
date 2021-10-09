@@ -587,6 +587,20 @@ text = "press 'fire' to start"
 fontSize = 3
 alignment = 1
 
+[node name="DeadLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
+visible = false
+position = Vector2( 640, 160 )
+text = "you died"
+fontSize = 10
+alignment = 1
+
+[node name="DeadLabel2" parent="Camera/Visor" instance=ExtResource( 16 )]
+visible = false
+position = Vector2( 640, 256 )
+text = "press 'start' to try again"
+fontSize = 3
+alignment = 1
+
 [node name="AmmoLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 use_parent_material = true
 position = Vector2( 1152, 660 )

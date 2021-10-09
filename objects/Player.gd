@@ -171,6 +171,8 @@ func hurt(damage):
 			$Camera/Visor/Fade/Anim.play("hurt")
 
 func die():
+	$Camera/Visor/DeadLabel.show()
+	$Camera/Visor/DeadLabel2.show()
 	$Camera/Visor/Fade/Anim.play("die")
 	$HurtSound.play()
 	alive = false

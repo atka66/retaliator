@@ -11,6 +11,6 @@ func _physics_process(delta):
 
 func _on_Projectile_body_entered(body):
 	if body != origin:
-		if body.has_method("hurt"):
-			body.hurt(damage)
+		if body.has_method("getHit"):
+			body.getHit(origin, damage)
 		queue_free()

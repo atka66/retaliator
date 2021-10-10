@@ -3,14 +3,13 @@ extends KinematicBody
 var MapNode
 var ConductorNode
 enum State {
-	SLEEPING, # unalerted
+	IDLE, # unalerted
 	SEARCHING, # alerted, approaching target
-	ATTACKING, # alerted, attacking target
-	DEAD # dead
+	ATTACKING # alerted, attacking target
 }
 const fov = 180
 var speed = 3
-var hp = 10
+var hp = 5
 var velocity = Vector3.ZERO
 
 var map_player = null
@@ -18,8 +17,10 @@ var map_nav = null
 
 export(bool) var alive = true
 export(Vector3) var lookAngle = Vector3(0, 0, -1)
-export(State) var state = State.SLEEPING
+export(State) var state = State.IDLE
+
 var target = null
+var aggroMap = {}
 
 func _ready():
 	MapNode = get_tree().get_nodes_in_group('conductor')[0]
@@ -29,12 +30,24 @@ func _ready():
 	map_nav = get_tree().get_nodes_in_group('navigation')[0]
 
 func _process(delta):
-	if state == State.SLEEPING:
-		checkFront()
-	if state == State.SEARCHING:
-		approachTarget()
-	if state == State.ATTACKING:
-		approachTarget()
+	# determine state
+	if alive:
+		if target == null:
+			if state != State.IDLE:
+				state = State.IDLE
+			if isInSight(map_player) && !aggroMap.has(map_player):
+				retaliate(map_player, 0)
+		else:
+			if isInSight(target):
+				state = State.ATTACKING
+			else:
+				state = State.SEARCHING
+
+		# act according to state
+		if state == State.SEARCHING || state == State.ATTACKING:
+			approachTarget()
+
+	# other
 	determineSprite()
 
 func _physics_process(delta):
@@ -48,11 +61,6 @@ func _physics_process(delta):
 	velocity.x *= Global.friction
 	velocity.z *= Global.friction
 
-func checkFront():
-	if target == null && isInSight(map_player):
-		target = map_player
-		state = State.ATTACKING
-
 func isInSight(entity):
 	var toEntityVec = entity.translation - translation
 	if acos(toEntityVec.normalized().dot(lookAngle)) < deg2rad(fov / 2):
@@ -65,7 +73,7 @@ func approachTarget():
 	if target != null && target.alive:
 		moveTowards(target.translation)
 	else:
-		state = State.SLEEPING
+		state = State.IDLE
 
 func moveTowards(targetPosition):
 	var path = map_nav.get_simple_path(translation, targetPosition)
@@ -75,7 +83,7 @@ func moveTowards(targetPosition):
 		velocity += lookAngle * speed
 
 func determineSprite():
-	if state == State.DEAD:
+	if !alive:
 		$Sprite.frame = 4
 	else:
 		var spriteAngle = lookAngle.normalized().dot((map_player.translation - translation).normalized())
@@ -89,32 +97,54 @@ func determineSprite():
 		else:
 			$Sprite.frame = 2
 
-func getHitBy(origin, damage):
+func getHit(origin, damage):
 	velocity += origin.translation.direction_to(translation) * damage * 10
 	hurt(damage)
-	target = origin
-	if state == State.SLEEPING:
-		state = State.ATTACKING
+	retaliate(origin, damage)
 
 func hurt(damage):
-	if state != State.DEAD:
+	if alive:
+		$HurtSound.play()
 		hp -= damage
 		if hp < 1:
 			hp = 0
 			die()
 
 func die():
-	state = State.DEAD
 	alive = false
 	$CollisionShape.disabled = true
 
 func _on_Conductor_beat():
-	if state == State.ATTACKING:
-		if randi() % 10 == 0:
+	determineTarget()
+	if alive && state == State.ATTACKING:
+		if randi() % 5 == 0:
 			shoot()
+
 func shoot():
 	var projectile = Res.ProjectileScene.instance()
 	projectile.origin = self
 	projectile.transform = transform.translated(Vector3(0, 3, 0))
 	projectile.direction = (target.translation - translation).normalized()
 	MapNode.add_child(projectile)
+	$ShootSound.play()
+
+func retaliate(_target, _aggro):
+	if aggroMap.has(_target):
+		aggroMap[_target] += _aggro
+	else:
+		aggroMap[_target] = _aggro
+
+func determineTarget():
+	if aggroMap.size() > 0:
+		var aggro = -1
+		var _target = target
+		for k in aggroMap.keys():
+			if !k.alive:
+				if _target == k:
+					_target = null
+				aggroMap.erase(k)
+				continue
+			if aggroMap[k] > aggro:
+				aggro = aggroMap[k]
+				_target = k
+		target = _target

@@ -112,6 +112,12 @@ func shoot():
 		hitScan.origin = self
 		hitScan.damage = 1
 		get_parent().add_child(hitScan)
+	wakeNearbyEnemies()
+
+func wakeNearbyEnemies():
+	for enemy in get_tree().get_nodes_in_group('enemy'):
+		if translation.distance_to(enemy.translation) < 100:
+			enemy.retaliate(self, 0)
 
 func reload():
 	ammo = Global.shotgun_ammo_cap
@@ -159,6 +165,10 @@ func renderVisor():
 		$Camera/Visor/AmmoSlashLabel.set_text('/')
 		$Camera/Visor/AmmoCapLabel.set_text(str(Global.shotgun_ammo_cap))
 		$Camera/Visor/HpLabel.set_text(str(hp))
+
+func getHit(origin, damage):
+	velocity += origin.translation.direction_to(translation) * damage * 10
+	hurt(damage)
 
 func hurt(damage):
 	if alive:

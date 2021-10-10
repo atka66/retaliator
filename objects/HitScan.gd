@@ -21,7 +21,8 @@ func _ready():
 		var impactPar = Res.ImpactPar.instance()
 		impactPar.translation = collPoint
 		if collider.is_in_group('enemy'):
-			collider.getHitBy(origin, damage)
+			if collider.has_method("getHit"):
+				collider.getHit(origin, damage)
 			impactPar.color = Color.red
 		else:
 			impactPar.color = Color.white

@@ -131,7 +131,7 @@ func switchWeapon(weapon):
 		selectedWeapon = weapon
 
 
-func _on_Conductor_beat():
+func _on_Conductor_beat(beat):
 	if Global.gameCntdwn > 0:
 		if Global.gameCntdwn > 1:
 			showCount(str(Global.gameCntdwn - 1), 8)

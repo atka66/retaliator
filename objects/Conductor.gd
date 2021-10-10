@@ -21,9 +21,10 @@ func _physics_process(delta):
 		tmpSongPositionInBeats = int(floor(songPosition / secPerBeat))
 		if tmpSongPositionInBeats < songPositionInBeats:
 			lastReportedBeat = 0
+			emit_signal("beat", 0)
 		songPositionInBeats = tmpSongPositionInBeats
 		if lastReportedBeat < songPositionInBeats:
-			emit_signal("beat")
+			emit_signal("beat", songPositionInBeats)
 			lastReportedBeat = songPositionInBeats
 
 func getBeatCheckResult():
@@ -40,3 +41,4 @@ func playMute():
 func playUnmute():
 	volume_db = tmpVolume
 	seek(0.0)
+	play()

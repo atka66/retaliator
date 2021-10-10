@@ -114,7 +114,7 @@ func die():
 	alive = false
 	$CollisionShape.disabled = true
 
-func _on_Conductor_beat():
+func _on_Conductor_beat(beat):
 	determineTarget()
 	if alive && state == State.ATTACKING:
 		if randi() % 5 == 0:

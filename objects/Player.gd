@@ -167,6 +167,7 @@ func hurt(damage):
 			hp = 0
 			die()
 		else:
+			$HurtSound.play()
 			$Camera/Visor/HpLabel/Anim.play("hurt")
 			$Camera/Visor/Fade/Anim.play("hurt")
 
@@ -174,6 +175,6 @@ func die():
 	$Camera/Visor/DeadLabel.show()
 	$Camera/Visor/DeadLabel2.show()
 	$Camera/Visor/Fade/Anim.play("die")
-	$HurtSound.play()
+	$DeathSound.play()
 	alive = false
 	ConductorNode.stop()

@@ -147,6 +147,7 @@ func _on_Conductor_beat():
 		if !$Camera/CrosshairAnim.is_playing():
 			$Camera/CrosshairAnim.play("pulse")
 	var crosshair = Res.CrosshairScene.instance()
+	crosshair.position = Vector2(640, 384)
 	get_tree().get_current_scene().add_child(crosshair)
 
 func showCount(cnt, size):

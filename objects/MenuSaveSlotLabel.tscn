@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://objects/CustomLabel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://objects/MenuSaveSlotLabel.gd" type="Script" id=2]
+
+[node name="MenuSaveSlotLabel" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="SlotLabel" parent="." instance=ExtResource( 1 )]
+fontSize = 4
+alignment = 1
+animate = false
+
+[node name="CompletionLabel" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 32 )
+fontSize = 2
+alignment = 1
+animate = false

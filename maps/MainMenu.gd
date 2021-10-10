@@ -1,16 +1,51 @@
 extends Node2D
 
+var menuState = 0
+var slotChoice = 0
+
+func _ready():
+	$Anim.play("load")
+	$State0Container/Anim.play("in")
+	#$State1Container/Anim.play("out")
+	pass
+
 func _input(event):
-	if (event.is_action_pressed("ui_accept")):
-		get_tree().change_scene("res://maps/Map1.tscn")
-	if (event.is_action_pressed("ui_cancel")):
-		get_tree().quit()
+	if $Conductor.playing:
+		if (event.is_action_pressed("ui_accept")):
+			get_node("State" + str(menuState) + "Container/Anim").play('out')
+			menuState += 1
+			get_node("State" + str(menuState) + "Container/Anim").play('in')
+		if (event.is_action_pressed("ui_cancel")):
+			get_node("State" + str(menuState) + "Container/Anim").play('out')
+			menuState -= 1
+			if (menuState > -1):
+				get_node("State" + str(menuState) + "Container/Anim").play('in')
+			
+		
+		if menuState > 2:
+			get_tree().change_scene("res://maps/Map1.tscn")
+		if menuState < 0:
+			get_tree().quit()
+			
+		if menuState == 1:
+			if (event.is_action_pressed('ui_up')):
+				slotChoice = (slotChoice + 5) % 3
+			if (event.is_action_pressed('ui_down')):
+				slotChoice = (slotChoice + 1) % 3
 
 func _on_Conductor_beat(beat):
 	if beat % 2 == 0:
-		$BeatAnim.play("beat")
-		$BeatAnim.seek(0)
-	var crosshair = Res.CrosshairScene.instance()
-	crosshair.position = Vector2(640, 520)
-	crosshair.width = 288
-	get_tree().get_current_scene().add_child(crosshair)
+		$Anim.play("beat")
+		$Anim.seek(0)
+		
+	if menuState == 0:
+		var crosshair = Res.CrosshairScene.instance()
+		crosshair.position = Vector2(0, 12)
+		crosshair.width = 320
+		$State0Container.add_child(crosshair)
+	if menuState == 1:
+		var crosshair = Res.CrosshairScene.instance()
+		crosshair.position = Vector2(0, (slotChoice * 128) + 12)
+		crosshair.width = 192
+		$State1Container.add_child(crosshair)
+	

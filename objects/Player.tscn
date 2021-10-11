@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sfx/death.ogg" type="AudioStream" id=2]
@@ -547,6 +547,23 @@ tracks/0/keys = {
 "values": [ 8.0, 2.0 ]
 }
 
+[sub_resource type="Animation" id=17]
+resource_name = "fadein"
+length = 0.5
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ), Color( 0, 0, 0, 0 ) ]
+}
+
 [sub_resource type="Animation" id=16]
 resource_name = "fadeout"
 length = 0.2
@@ -688,12 +705,14 @@ begin_cap_mode = 1
 [node name="Fade" type="ColorRect" parent="Camera"]
 margin_right = 1280.0
 margin_bottom = 768.0
-color = Color( 0, 0, 0, 0 )
+color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Anim" type="AnimationPlayer" parent="Camera/Fade"]
+autoplay = "fadein"
+anims/fadein = SubResource( 17 )
 anims/fadeout = SubResource( 16 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]

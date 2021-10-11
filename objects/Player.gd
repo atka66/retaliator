@@ -18,6 +18,7 @@ export(bool) var weaponBusy = false
 var ammo = Global.shotgun_ammo_cap
 
 func _ready():
+	Global.gameCntdwn = 5
 	ConductorNode = get_tree().get_nodes_in_group('conductor')[0]
 	ConductorNode.connect("beat", self, "_on_Conductor_beat")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

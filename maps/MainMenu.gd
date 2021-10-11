@@ -12,14 +12,13 @@ func _ready():
 func _input(event):
 	if $Conductor.playing:
 		if (event.is_action_pressed("ui_accept")):
-			get_node("State" + str(menuState) + "Container/Anim").play('out')
+			playStateAnim(menuState, 'out')
 			menuState += 1
-			get_node("State" + str(menuState) + "Container/Anim").play('in')
+			playStateAnim(menuState, 'in')
 		if (event.is_action_pressed("ui_cancel")):
-			get_node("State" + str(menuState) + "Container/Anim").play('out')
+			playStateAnim(menuState, 'out')
 			menuState -= 1
-			if (menuState > -1):
-				get_node("State" + str(menuState) + "Container/Anim").play('in')
+			playStateAnim(menuState, 'in')
 			
 		
 		if menuState > 2:
@@ -48,4 +47,8 @@ func _on_Conductor_beat(beat):
 		crosshair.position = Vector2(0, (slotChoice * 128) + 12)
 		crosshair.width = 192
 		$State1Container.add_child(crosshair)
-	
+
+func playStateAnim(state, anim):
+	var nodeName = 'State' + str(state) + 'Container/Anim'
+	if has_node(nodeName):
+		get_node(nodeName).play(anim)

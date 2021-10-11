@@ -74,6 +74,9 @@ func _input(event):
 				if !ConductorNode.playing:
 					ConductorNode.playMute()
 					$Camera/Visor/ReadyLabel.time_disappear()
+	else:
+		if event.is_action_pressed("ui_accept"):
+			get_tree().change_scene("res://maps/MainMenu.tscn")
 
 func _process(delta):
 	if !weaponBusy:

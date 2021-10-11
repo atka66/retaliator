@@ -584,8 +584,8 @@ anims/hurt = SubResource( 2 )
 
 [node name="ReadyLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
 position = Vector2( 640, 160 )
-text = "press 'fire' to start"
-fontSize = 3
+text = "press fire"
+fontSize = 4
 alignment = 1
 
 [node name="DeadLabel" parent="Camera/Visor" instance=ExtResource( 16 )]
@@ -598,7 +598,7 @@ alignment = 1
 [node name="DeadLabel2" parent="Camera/Visor" instance=ExtResource( 16 )]
 visible = false
 position = Vector2( 640, 256 )
-text = "press 'start' to try again"
+text = "you have been outplayed"
 fontSize = 3
 alignment = 1
 

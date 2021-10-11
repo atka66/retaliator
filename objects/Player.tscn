@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://objects/Player.gd" type="Script" id=1]
 [ext_resource path="res://sfx/death.ogg" type="AudioStream" id=2]
@@ -547,6 +547,36 @@ tracks/0/keys = {
 "values": [ 8.0, 2.0 ]
 }
 
+[sub_resource type="Animation" id=16]
+resource_name = "fadeout"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "goToMenu"
+} ]
+}
+
 [sub_resource type="CylinderShape" id=15]
 radius = 2.0
 height = 6.0
@@ -654,6 +684,17 @@ points = PoolVector2Array( 0, -32, -32, 0, 0, 32, 32, 0, 0, -32 )
 width = 2.0
 default_color = Color( 1, 1, 1, 1 )
 begin_cap_mode = 1
+
+[node name="Fade" type="ColorRect" parent="Camera"]
+margin_right = 1280.0
+margin_bottom = 768.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Anim" type="AnimationPlayer" parent="Camera/Fade"]
+anims/fadeout = SubResource( 16 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )

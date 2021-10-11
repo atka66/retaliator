@@ -75,8 +75,8 @@ func _input(event):
 					ConductorNode.playMute()
 					$Camera/Visor/ReadyLabel.time_disappear()
 	else:
-		if event.is_action_pressed("ui_accept"):
-			get_tree().change_scene("res://maps/MainMenu.tscn")
+		if event.is_action_pressed("ui_accept") && !$Camera/Fade/Anim.is_playing():
+			$Camera/Fade/Anim.play("fadeout")
 
 func _process(delta):
 	if !weaponBusy:
@@ -192,3 +192,6 @@ func die():
 	$DeathSound.play()
 	alive = false
 	ConductorNode.stop()
+
+func goToMenu():
+	get_tree().change_scene("res://maps/MainMenu.tscn")

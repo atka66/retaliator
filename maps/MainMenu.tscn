@@ -8,7 +8,7 @@
 [ext_resource path="res://sfx/000_1.ogg" type="AudioStream" id=6]
 [ext_resource path="res://objects/MenuMapLabel.tscn" type="PackedScene" id=7]
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=1]
 resource_name = "rise"
 length = 0.5
 step = 0.5
@@ -25,7 +25,7 @@ tracks/0/keys = {
 "values": [ Vector2( 640, 256 ), Vector2( 640, 64 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=2]
 resource_name = "sink"
 length = 0.5
 step = 0.5
@@ -42,8 +42,7 @@ tracks/0/keys = {
 "values": [ Vector2( 640, 64 ), Vector2( 640, 256 ) ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "in"
+[sub_resource type="Animation" id=3]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -59,8 +58,7 @@ tracks/0/keys = {
 "values": [ Vector2( -640, 512 ), Vector2( 640, 512 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "out"
+[sub_resource type="Animation" id=4]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -76,8 +74,7 @@ tracks/0/keys = {
 "values": [ Vector2( 640, 512 ), Vector2( -640, 512 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "in"
+[sub_resource type="Animation" id=5]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -93,8 +90,7 @@ tracks/0/keys = {
 "values": [ Vector2( -640, 384 ), Vector2( 640, 384 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "out"
+[sub_resource type="Animation" id=6]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -110,7 +106,7 @@ tracks/0/keys = {
 "values": [ Vector2( 640, 384 ), Vector2( -640, 384 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=7]
 resource_name = "in"
 length = 0.5
 step = 0.5
@@ -127,7 +123,7 @@ tracks/0/keys = {
 "values": [ Vector2( -640, 256 ), Vector2( 640, 256 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=8]
 resource_name = "out"
 length = 0.5
 step = 0.5
@@ -144,7 +140,7 @@ tracks/0/keys = {
 "values": [ Vector2( 640, 256 ), Vector2( -640, 256 ) ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=9]
 length = 0.5
 step = 0.5
 tracks/0/type = "value"
@@ -160,7 +156,7 @@ tracks/0/keys = {
 "values": [ Vector2( 1.3, 1.3 ), Vector2( 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=10]
 resource_name = "fadeout"
 length = 0.5
 step = 0.5
@@ -191,7 +187,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=11]
 length = 2.0
 step = 0.5
 tracks/0/type = "value"
@@ -268,8 +264,8 @@ fontSize = 10
 animate = false
 
 [node name="Anim" type="AnimationPlayer" parent="TitleContainer"]
-anims/rise = SubResource( 7 )
-anims/sink = SubResource( 8 )
+anims/rise = SubResource( 1 )
+anims/sink = SubResource( 2 )
 
 [node name="State0Container" type="Node2D" parent="."]
 modulate = Color( 1, 1, 1, 0 )
@@ -282,8 +278,8 @@ alignment = 1
 animate = false
 
 [node name="Anim" type="AnimationPlayer" parent="State0Container"]
-anims/in = SubResource( 1 )
-anims/out = SubResource( 2 )
+anims/in = SubResource( 3 )
+anims/out = SubResource( 4 )
 
 [node name="State1Container" type="Node2D" parent="."]
 position = Vector2( -640, 384 )
@@ -301,15 +297,15 @@ position = Vector2( 0, 256 )
 slotId = 3
 
 [node name="Anim" type="AnimationPlayer" parent="State1Container"]
-anims/in = SubResource( 3 )
-anims/out = SubResource( 4 )
+anims/in = SubResource( 5 )
+anims/out = SubResource( 6 )
 
 [node name="State2Container" type="Node2D" parent="."]
 position = Vector2( -640, 256 )
 
 [node name="Anim" type="AnimationPlayer" parent="State2Container"]
-anims/in = SubResource( 9 )
-anims/out = SubResource( 10 )
+anims/in = SubResource( 7 )
+anims/out = SubResource( 8 )
 
 [node name="MapLabel1" parent="State2Container" instance=ExtResource( 7 )]
 mapName = "map 01"
@@ -331,8 +327,8 @@ position = Vector2( 0, 256 )
 mapName = "map 05"
 
 [node name="Anim" type="AnimationPlayer" parent="."]
-anims/beat = SubResource( 5 )
-anims/fadeout = SubResource( 11 )
-anims/load = SubResource( 6 )
+anims/beat = SubResource( 9 )
+anims/fadeout = SubResource( 10 )
+anims/load = SubResource( 11 )
 
 [connection signal="beat" from="Conductor" to="." method="_on_Conductor_beat"]

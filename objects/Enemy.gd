@@ -4,8 +4,9 @@ var MapNode
 var ConductorNode
 enum State {
 	IDLE, # unalerted
-	SEARCHING, # alerted, approaching target
-	ATTACKING # alerted, attacking target
+	SEARCHING, # looking for target
+	APPROACHING, # approaching target, potentionally attacking
+	ATTACKING, # starting to attack target
 }
 const fov = 180
 var speed = 3
@@ -38,13 +39,14 @@ func _process(delta):
 			if isInSight(map_player) && !aggroMap.has(map_player):
 				retaliate(map_player, 0)
 		else:
-			if isInSight(target):
-				state = State.ATTACKING
-			else:
-				state = State.SEARCHING
+			if state != State.ATTACKING:
+				if isInSight(target):
+					state = State.APPROACHING
+				else:
+					state = State.SEARCHING
 
 		# act according to state
-		if state == State.SEARCHING || state == State.ATTACKING:
+		if state == State.SEARCHING || state == State.APPROACHING:
 			approachTarget()
 
 	# other
@@ -96,6 +98,8 @@ func determineSprite():
 				$Sprite.frame = 3
 		else:
 			$Sprite.frame = 2
+		if state == State.ATTACKING:
+			$Sprite.frame += 5
 
 func getHit(origin, damage):
 	velocity += origin.translation.direction_to(translation) * damage * 10
@@ -116,9 +120,13 @@ func die():
 
 func _on_Conductor_beat(beat):
 	determineTarget()
-	if alive && state == State.ATTACKING:
-		if randi() % 5 == 0:
+	if alive:
+		if state == State.ATTACKING:
 			shoot()
+			state = State.APPROACHING
+		if state == State.APPROACHING:
+			if randi() % 5 == 0:
+				state = State.ATTACKING
 
 func shoot():
 	var projectile = Res.ProjectileScene.instance()

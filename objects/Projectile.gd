@@ -13,4 +13,7 @@ func _on_Projectile_body_entered(body):
 	if body != origin:
 		if body.has_method("getHit"):
 			body.getHit(origin, damage)
+		var impactProjectile = Res.ImpactProjectile.instance()
+		impactProjectile.translation = translation
+		get_parent().add_child(impactProjectile)
 		queue_free()

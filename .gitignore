@@ -1,4 +1,3 @@
-
 # Godot-specific ignores
 .import/
 export.cfg
@@ -8,3 +7,9 @@ export_presets.cfg
 .mono/
 data_*/
 *.mid
+
+# Godot 4+ specific ignores
+.godot/
+/android/
+export/
+*.bak 
